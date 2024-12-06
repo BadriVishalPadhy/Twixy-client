@@ -6,6 +6,8 @@ import { IoNotifications } from "react-icons/io5";
 import { SlEnvolope } from "react-icons/sl";
 import { PiBookmarkSimpleBold } from "react-icons/pi";
 import { CgProfile } from "react-icons/cg";
+import FeedCard from "@/components/FeedCard";
+
 
 
 export default function Home() {
@@ -60,10 +62,26 @@ export default function Home() {
             <button  className="bg-white p-3 text-lg font-semibold w-full rounded-full px-20 mt-4 hover:bg-slate-200 transition-all text-black tracking-tight " >Post</button>
           </div>
         </div>
-        <div className="col-span-6 border-x  border-zinc-800"></div>
+        <div className="col-span-6 border-x overflow-y-scroll no-scrollbar h-screen border-zinc-800 ">
+          <FeedCard/>
+          <FeedCard/>
+          <FeedCard/>
+          <FeedCard/>
+          <FeedCard/>
+          <FeedCard/>
+          <FeedCard/>
+          <FeedCard/>
+          <FeedCard/>
+          <FeedCard/>
+          <FeedCard/>
+          <FeedCard/>
+          <FeedCard/>
+          <FeedCard/>
+          <FeedCard/>
+        </div>
         <div className="col-span-3 "></div>
       </div>
-      npm install react-icons --save
+     
     </div>
   );
 }
