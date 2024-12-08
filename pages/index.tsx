@@ -7,6 +7,7 @@ import { SlEnvolope } from "react-icons/sl";
 import { PiBookmarkSimpleBold } from "react-icons/pi";
 import { CgProfile } from "react-icons/cg";
 import FeedCard from "@/components/FeedCard";
+import { GoogleLogin } from "@react-oauth/google"
 
 
 
@@ -79,7 +80,13 @@ export default function Home() {
           <FeedCard/>
           <FeedCard/>
         </div>
-        <div className="col-span-3 "></div>
+        <div className="col-span-3   ">
+          <h1 className="text-2xl">New to Twixy</h1>
+          <div className="  p-8 bg-slate-900 ">
+          <GoogleLogin  onSuccess={ cred => {console.log(cred)}}/>
+          </div>
+      
+        </div>
       </div>
      
     </div>
