@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { GiBirdTwitter } from "react-icons/gi";
 import { GoHomeFill } from "react-icons/go";
 import { GoSearch } from "react-icons/go";
@@ -7,11 +7,26 @@ import { SlEnvolope } from "react-icons/sl";
 import { PiBookmarkSimpleBold } from "react-icons/pi";
 import { CgProfile } from "react-icons/cg";
 import FeedCard from "@/components/FeedCard";
-import { GoogleLogin } from "@react-oauth/google"
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google"
+import toast from "react-hot-toast";
+import { graphql } from "@/gql";
+import { verify } from "crypto";
+import { verifyUserGoogleTokenQuery } from "@/graphql/query/user";
+import { graphqlClient } from "@/client/api";
 
 
 
-export default function Home() {
+
+export default  function Home() {
+
+  const handleWithGoogle = useCallback( async(cred:CredentialResponse) => {
+    const googleToken = cred.credential;
+    if(!googleToken) return toast.error("no user found")
+      const { verifyGoogletokens  } =  await  graphqlClient.request(verifyUserGoogleTokenQuery,{token:googleToken})
+    toast.success("Success");
+console.log(verifyGoogletokens)
+  }, [])
+
   interface appSideBarItems {
     title: string;
     icon: React.ReactNode;
@@ -82,8 +97,8 @@ export default function Home() {
         </div>
         <div className="col-span-3   ">
           <h1 className="text-2xl">New to Twixy</h1>
-          <div className="  p-8 bg-slate-900 ">
-          <GoogleLogin  onSuccess={ cred => {console.log(cred)}}/>
+          <div className="   p-8 bg-slate-900 ">
+          <GoogleLogin  onSuccess={ handleWithGoogle}/>
           </div>
       
         </div>
