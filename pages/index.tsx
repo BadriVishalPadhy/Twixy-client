@@ -22,10 +22,14 @@ export default  function Home() {
   const handleWithGoogle = useCallback( async(cred:CredentialResponse) => {
     const googleToken = cred.credential;
     if(!googleToken) return toast.error("no user found")
-      const { verifyGoogletokens  } =  await  graphqlClient.request(verifyUserGoogleTokenQuery,{token:googleToken})
+     
+      const {verifyGoogletokens} =await graphqlClient.request(verifyUserGoogleTokenQuery,{token: googleToken})
+
     toast.success("Success");
 console.log(verifyGoogletokens)
+if(verifyGoogletokens) window.localStorage.setItem('__twixy_token',verifyGoogletokens);
   }, [])
+  
 
   interface appSideBarItems {
     title: string;
