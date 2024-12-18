@@ -17,6 +17,7 @@ import { Token } from "graphql";
 import { useCurrentUser } from "@/hooks/user";
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
+import { PiImageSquare } from "react-icons/pi";
 
 export default function Home() {
   const { user } = useCurrentUser();
@@ -71,7 +72,12 @@ export default function Home() {
       icon: <CgProfile />,
     },
   ];
-
+  const handleSelectedImage = useCallback(() => {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+  }, []);
   return (
     <div>
       <div className="grid grid-cols-12 w-screen h-screen px-28">
@@ -94,53 +100,82 @@ export default function Home() {
               Post
             </button>
           </div>
-         {
-          user && (
+          {user && (
             <div className="absolute bottom-5 gap-2 flex items-center ">
-            {user && user.profileImageURL && (
-              <Image
-                src={user?.profileImageURL}
-                alt="user-image"
-                width={50}
-                height={50}
-                className="rounded-full"
-              />
-            )}
-            <div>
-              <h3 className="text-xl">
-                {user.firstName}  {user.lastName}
-              </h3>
+              {user && user.profileImageURL && (
+                <Image
+                  src={user?.profileImageURL}
+                  alt="user-image"
+                  width={50}
+                  height={50}
+                  className="rounded-full"
+                />
+              )}
+              <div>
+                <h3 className="text-xl">
+                  {user.firstName} {user.lastName}
+                </h3>
+              </div>
             </div>
-          </div>
-    
-          )
-         }
+          )}
         </div>
         <div className="col-span-6 border-x overflow-y-scroll no-scrollbar h-screen border-zinc-800 ">
-          <FeedCard />
-          <FeedCard />
-          <FeedCard />
-          <FeedCard />
-          <FeedCard />
-          <FeedCard />
-          <FeedCard />
-          <FeedCard />
-          <FeedCard />
-          <FeedCard />
-          <FeedCard />
-          <FeedCard />
-          <FeedCard />
-          <FeedCard />
-          <FeedCard />
-        </div>
-        {!user && (
-          <div className="col-span-3   ">
-            <h1 className="text-2xl">New to Twixy</h1>
-            <div className="   p-8 bg-slate-900 ">
-              <GoogleLogin onSuccess={handleWithGoogle} />
+          <div>
+            <div className="  cursor-pointer  p-3">
+              <div className="grid grid-cols-12 gap-3">
+                <div className="col-span-1 ">
+                  {user?.profileImageURL && (
+                    <Image
+                      src={user?.profileImageURL}
+                      alt="user-image"
+                      width={50}
+                      height={50}
+                      className="rounded-full"
+                    />
+                  )}
+                </div>
+                <div className="col-span-11 ">
+                  <textarea
+                    placeholder="What is happening?!"
+                    className="border-b border-gray-800 bg-transparent w-full p-2 text-xl  focus-outline-none "
+                  ></textarea>
+                </div>
+              </div>
+              <div className="flex justify-between items-center">
+                <PiImageSquare
+                  onClick={handleSelectedImage}
+                  className="text-blue-300  text-xl "
+                />
+                <button className=" bg-white  text-base font-semibold py-1 px-3 rounded-2xl  hover:bg-slate-200 transition-all text-black tracking-tight ">
+                  Post
+                </button>
+              </div>
             </div>
+            <FeedCard />
+            <FeedCard />
+            <FeedCard />
+            <FeedCard />
+            <FeedCard />
+            <FeedCard />
+            <FeedCard />
+            <FeedCard />
+            <FeedCard />
+            <FeedCard />
+            <FeedCard />
+            <FeedCard />
+            <FeedCard />
+            <FeedCard />
+            <FeedCard />
           </div>
-        )}
+          {!user && (
+            <div className="col-span-3   ">
+              <h1 className="text-2xl">New to Twixy</h1>
+              <div className="   p-8 bg-slate-900 ">
+                <GoogleLogin onSuccess={handleWithGoogle} />
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
