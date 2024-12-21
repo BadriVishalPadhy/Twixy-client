@@ -15,12 +15,16 @@ import { verifyUserGoogleTokenQuery } from "@/graphql/query/user";
 import { graphqlClient } from "@/client/api";
 import { Token } from "graphql";
 import { useCurrentUser } from "@/hooks/user";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { PiImageSquare } from "react-icons/pi";
+import { useGetAllTweets } from "@/hooks/tweet";
+import { Tweet } from "@/gql/graphql";
 
 export default function Home() {
   const { user } = useCurrentUser();
+  const { tweets = [] } = useGetAllTweets();
+
   const queryClient = useQueryClient();
   const handleWithGoogle = useCallback(
     async (cred: CredentialResponse) => {
@@ -151,24 +155,16 @@ export default function Home() {
                 </button>
               </div>
             </div>
-            <FeedCard />
-            <FeedCard />
-            <FeedCard />
-            <FeedCard />
-            <FeedCard />
-            <FeedCard />
-            <FeedCard />
-            <FeedCard />
-            <FeedCard />
-            <FeedCard />
-            <FeedCard />
-            <FeedCard />
-            <FeedCard />
-            <FeedCard />
-            <FeedCard />
+
+            {tweets?.map((tweet) =>
+              tweet ? <FeedCard key={tweet?.id} data={tweet as Tweet} /> : null
+            )}
           </div>
+        </div>
+
+        <div className="col-span-3   ">
           {!user && (
-            <div className="col-span-3   ">
+            <div>
               <h1 className="text-2xl">New to Twixy</h1>
               <div className="   p-8 bg-slate-900 ">
                 <GoogleLogin onSuccess={handleWithGoogle} />
