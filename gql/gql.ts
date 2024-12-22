@@ -17,6 +17,7 @@ const documents = {
     "#graphql\n  \n  query GetAllTweets {\n    getAllTweets {\n      id\n      content\n      imageURL\n      author {\n        firstName\n        lastName\n        profileImageURL\n      }\n    }\n  }\n  ": types.GetAllTweetsDocument,
     "\n  query VerifyUserGoogleToken($token: String!) {\n    verifyGoogletokens(token: $token)\n  }\n\n": types.VerifyUserGoogleTokenDocument,
     "query GetCurrentUser {\n  getCurrentUser {\n    profileImageURL\n    lastName\n    id\n    firstName\n    email\n  }\n}": types.GetCurrentUserDocument,
+    "#graphql\n  mutation CreateTweet($payload: CreateTweetData!) {\n    createTweet(payload: $payload){\n      id\n    }\n  }\n  ": types.CreateTweetDocument,
 };
 
 /**
@@ -45,6 +46,10 @@ export function graphql(source: "\n  query VerifyUserGoogleToken($token: String!
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "query GetCurrentUser {\n  getCurrentUser {\n    profileImageURL\n    lastName\n    id\n    firstName\n    email\n  }\n}"): (typeof documents)["query GetCurrentUser {\n  getCurrentUser {\n    profileImageURL\n    lastName\n    id\n    firstName\n    email\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "#graphql\n  mutation CreateTweet($payload: CreateTweetData!) {\n    createTweet(payload: $payload){\n      id\n    }\n  }\n  "): (typeof documents)["#graphql\n  mutation CreateTweet($payload: CreateTweetData!) {\n    createTweet(payload: $payload){\n      id\n    }\n  }\n  "];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

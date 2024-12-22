@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { GiBirdTwitter } from "react-icons/gi";
 import { GoHomeFill } from "react-icons/go";
 import { GoSearch } from "react-icons/go";
@@ -18,7 +18,7 @@ import { useCurrentUser } from "@/hooks/user";
 import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { PiImageSquare } from "react-icons/pi";
-import { useGetAllTweets } from "@/hooks/tweet";
+import { useCreateTweet, useGetAllTweets } from "@/hooks/tweet";
 import { Tweet } from "@/gql/graphql";
 
 export default function Home() {
@@ -26,6 +26,8 @@ export default function Home() {
   const { tweets = [] } = useGetAllTweets();
 
   const queryClient = useQueryClient();
+  const [content, setContent] = useState<string>("");
+  const { mutate } = useCreateTweet();
   const handleWithGoogle = useCallback(
     async (cred: CredentialResponse) => {
       const googleToken = cred.credential;
@@ -82,6 +84,12 @@ export default function Home() {
     input.setAttribute("accept", "image/*");
     input.click();
   }, []);
+
+  const handleCreateTweet = useCallback(() => {
+    mutate({
+      content,
+    });
+  }, [content, mutate]);
   return (
     <div>
       <div className="grid grid-cols-12 w-screen h-screen px-28">
@@ -140,6 +148,8 @@ export default function Home() {
                 </div>
                 <div className="col-span-11 ">
                   <textarea
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
                     placeholder="What is happening?!"
                     className="border-b border-gray-800 bg-transparent w-full p-2 text-xl  focus-outline-none "
                   ></textarea>
@@ -150,7 +160,10 @@ export default function Home() {
                   onClick={handleSelectedImage}
                   className="text-blue-300  text-xl "
                 />
-                <button className=" bg-white  text-base font-semibold py-1 px-3 rounded-2xl  hover:bg-slate-200 transition-all text-black tracking-tight ">
+                <button
+                  onClick={handleCreateTweet}
+                  className=" bg-white  text-base font-semibold py-1 px-3 rounded-2xl  hover:bg-slate-200 transition-all text-black tracking-tight "
+                >
                   Post
                 </button>
               </div>
