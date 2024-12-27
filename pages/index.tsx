@@ -14,15 +14,17 @@ import { verify } from "crypto";
 import { verifyUserGoogleTokenQuery } from "@/graphql/query/user";
 import { graphqlClient } from "@/client/api";
 import { Token } from "graphql";
+
 import { useCurrentUser } from "@/hooks/user";
-import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
+import { useQueryClient } from "@tanstack/react-query";
+
 import { PiImageSquare } from "react-icons/pi";
 import { useCreateTweet, useGetAllTweets } from "@/hooks/tweet";
 import { Tweet } from "@/gql/graphql";
+import TwitterLayout from "@/components/Layout/TwitterLayout";
 
 export default function Home() {
-  const { user } = useCurrentUser();
   const { tweets = [] } = useGetAllTweets();
 
   const queryClient = useQueryClient();
@@ -47,43 +49,13 @@ export default function Home() {
     [queryClient]
   );
 
-  interface appSideBarItems {
-    title: string;
-    icon: React.ReactNode;
-  }
-
-  const sideBarItems: appSideBarItems[] = [
-    {
-      title: "Home",
-      icon: <GoHomeFill />,
-    },
-    {
-      title: "Search",
-      icon: <GoSearch />,
-    },
-    {
-      title: "Notifications",
-      icon: <IoNotifications />,
-    },
-    {
-      title: "Messages",
-      icon: <SlEnvolope />,
-    },
-    {
-      title: "Bookmarks",
-      icon: <PiBookmarkSimpleBold />,
-    },
-    {
-      title: "Profile",
-      icon: <CgProfile />,
-    },
-  ];
   const handleSelectedImage = useCallback(() => {
     const input = document.createElement("input");
     input.setAttribute("type", "file");
     input.setAttribute("accept", "image/*");
     input.click();
   }, []);
+  const { user } = useCurrentUser();
 
   const handleCreateTweet = useCallback(() => {
     mutate({
@@ -92,29 +64,11 @@ export default function Home() {
   }, [content, mutate]);
   return (
     <div>
-      <div className="grid grid-cols-12 w-screen h-screen px-28">
-        <div className="col-span-3 flex justify-start flex-col px-4 pt-2 relative">
-          <div
-            className="text-4xl cursor-pointer w-fit h-fit hover:bg-[#181818]   p-6 rounded-full 
-           transition-all"
-          >
-            <GiBirdTwitter />
-          </div>
-          <div className="mt-2  text-2xl font-medium">
-            <ul>
-              {sideBarItems.map((item) => (
-                <li className="flex justify-start items-center gap-4 text-2xl hover:bg-[#181818] px-6 cursor-pointer py-4 rounded-full transition-all  w-fit ">
-                  <span>{item.icon}</span> <span>{item.title}</span>{" "}
-                </li>
-              ))}
-            </ul>
-            <button className="bg-white p-3 text-lg font-semibold w-full rounded-full px-20 mt-4 hover:bg-slate-200 transition-all text-black tracking-tight ">
-              Post
-            </button>
-          </div>
-          {user && (
-            <div className="absolute bottom-5 gap-2 flex items-center ">
-              {user && user.profileImageURL && (
+      <TwitterLayout>
+        <div className="border border-r-0 border-l-0 border-b-0 border-gray-600 p-5 hover:bg-slate-900 transition-all cursor-pointer">
+          <div className="grid grid-cols-12 gap-3">
+            <div className="col-span-1">
+              {user?.profileImageURL && (
                 <Image
                   src={user?.profileImageURL}
                   alt="user-image"
@@ -123,69 +77,34 @@ export default function Home() {
                   className="rounded-full"
                 />
               )}
-              <div>
-                <h3 className="text-xl">
-                  {user.firstName} {user.lastName}
-                </h3>
-              </div>
             </div>
-          )}
-        </div>
-        <div className="col-span-6 border-x overflow-y-scroll no-scrollbar h-screen border-zinc-800 ">
-          <div>
-            <div className="  cursor-pointer  p-3">
-              <div className="grid grid-cols-12 gap-3">
-                <div className="col-span-1 ">
-                  {user?.profileImageURL && (
-                    <Image
-                      src={user?.profileImageURL}
-                      alt="user-image"
-                      width={50}
-                      height={50}
-                      className="rounded-full"
-                    />
-                  )}
-                </div>
-                <div className="col-span-11 ">
-                  <textarea
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    placeholder="What is happening?!"
-                    className="border-b border-gray-800 bg-transparent w-full p-2 text-xl  focus-outline-none "
-                  ></textarea>
-                </div>
-              </div>
-              <div className="flex justify-between items-center">
-                <PiImageSquare
-                  onClick={handleSelectedImage}
-                  className="text-blue-300  text-xl "
-                />
-                <button
-                  onClick={handleCreateTweet}
-                  className=" bg-white  text-base font-semibold py-1 px-3 rounded-2xl  hover:bg-slate-200 transition-all text-black tracking-tight "
-                >
-                  Post
-                </button>
-              </div>
+            <div className="col-span-11 ">
+              <textarea
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                placeholder="What is happening?!"
+                className="border-b border-gray-800 bg-transparent w-full p-2 text-xl  focus-outline-none "
+              ></textarea>
             </div>
-
-            {tweets?.map((tweet) =>
-              tweet ? <FeedCard key={tweet?.id} data={tweet as Tweet} /> : null
-            )}
+          </div>
+          <div className="flex justify-between items-center">
+            <PiImageSquare
+              onClick={handleSelectedImage}
+              className="text-blue-300  text-xl "
+            />
+            <button
+              onClick={handleCreateTweet}
+              className=" bg-white  text-base font-semibold py-1 px-3 rounded-2xl  hover:bg-slate-200 transition-all text-black tracking-tight "
+            >
+              Post
+            </button>
           </div>
         </div>
 
-        <div className="col-span-3   ">
-          {!user && (
-            <div>
-              <h1 className="text-2xl">New to Twixy</h1>
-              <div className="   p-8 bg-slate-900 ">
-                <GoogleLogin onSuccess={handleWithGoogle} />
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+        {tweets?.map((tweet) =>
+          tweet ? <FeedCard key={tweet?.id} data={tweet as Tweet} /> : null
+        )}
+      </TwitterLayout>
     </div>
   );
 }
