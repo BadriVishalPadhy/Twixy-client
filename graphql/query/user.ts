@@ -41,6 +41,7 @@ export const getCurrentUserIdQuery = graphql(`query GetUserById($id: ID!) {
       id
       content
       author {
+        id
         firstName
         lastName
         profileImageURL

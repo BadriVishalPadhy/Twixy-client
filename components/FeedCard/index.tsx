@@ -7,6 +7,8 @@ import { VscGraph } from "react-icons/vsc";
 import { FiShare } from "react-icons/fi";
 import { PiBookmarkSimpleBold } from "react-icons/pi";
 import { Tweet } from "@/gql/graphql";
+import Link from "next/link";
+import { GetServerSideProps } from "next";
 
 interface FeedCardProps {
   data: Tweet;
@@ -30,7 +32,10 @@ const FeedCard: React.FC<FeedCardProps> = (props) => {
         </div>
         <div className="col-span-11 ">
           <h5 className=" font-semibold ">
-            {data.author?.firstName} {data.author?.lastName}
+            <Link href={`/data.author?.id`}>
+              {" "}
+              {data.author?.firstName} {data.author?.lastName}
+            </Link>
           </h5>
           <p>{data.content}</p>
           <div className="flex gap-24 pt-5 ">

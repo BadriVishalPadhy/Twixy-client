@@ -23,10 +23,13 @@ import { PiImageSquare } from "react-icons/pi";
 import { useCreateTweet, useGetAllTweets } from "@/hooks/tweet";
 import { Tweet } from "@/gql/graphql";
 import TwitterLayout from "@/components/Layout/TwitterLayout";
+import { getAllTweetsQuery } from "@/graphql/query/tweet";
+import { GetServerSideProps } from "next";
 
-export default function Home() {
-  const { tweets = [] } = useGetAllTweets();
-
+interface HomeProps {
+  tweets?: Tweet[];
+}
+export default function Home(props: HomeProps) {
   const queryClient = useQueryClient();
   const [content, setContent] = useState<string>("");
   const { mutate } = useCreateTweet();
@@ -62,6 +65,7 @@ export default function Home() {
       content,
     });
   }, [content, mutate]);
+
   return (
     <div>
       <TwitterLayout>
@@ -101,10 +105,20 @@ export default function Home() {
           </div>
         </div>
 
-        {tweets?.map((tweet) =>
+        {props.tweets?.map((tweet) =>
           tweet ? <FeedCard key={tweet?.id} data={tweet as Tweet} /> : null
         )}
       </TwitterLayout>
     </div>
   );
 }
+export const getServerSideProps: GetServerSideProps<HomeProps> = async (
+  context
+) => {
+  const allTweets = await graphqlClient.request(getAllTweetsQuery);
+  return {
+    props: {
+      tweets: allTweets.getAllTweets as Tweet[],
+    },
+  };
+};
