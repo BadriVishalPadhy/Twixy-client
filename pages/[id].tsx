@@ -1,11 +1,14 @@
 import TwitterLayout from "@/components/Layout/TwitterLayout";
-import { NextPage } from "next";
+import { NextPage, GetServerSideProps } from "next";
 import Image from "next/image";
 import { GoArrowLeft } from "react-icons/go";
 import Router, { useRouter } from "next/router";
 import { useCurrentUser } from "@/hooks/user";
 import FeedCard from "@/components/FeedCard";
 import { Tweet } from "@/gql/graphql";
+import { notFound } from "next/navigation";
+import { graphqlClient } from "@/client/api";
+import { getCurrentUserIdQuery } from "@/graphql/query/user";
 const userProfilePage: NextPage = () => {
   const { user } = useCurrentUser();
   const router = useRouter();
@@ -43,4 +46,18 @@ const userProfilePage: NextPage = () => {
     </TwitterLayout>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const id = context.query.id as string | undefined;
+  if (!id) return { notFound: true };
+  const userInfo = await graphqlClient.request(getCurrentUserIdQuery, { id });
+  if (!userInfo?.getUserById) return { notFound: true };
+
+  return {
+    props: {
+      userInfo: userInfo.getUserById,
+    },
+  };
+};
+
 export default userProfilePage;
