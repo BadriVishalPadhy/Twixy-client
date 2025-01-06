@@ -32,6 +32,7 @@ interface HomeProps {
 export default function Home(props: HomeProps) {
   const queryClient = useQueryClient();
   const [content, setContent] = useState<string>("");
+  const { tweets = props.tweets as Tweet[] } = useGetAllTweets();
   const { mutate } = useCreateTweet();
   const handleWithGoogle = useCallback(
     async (cred: CredentialResponse) => {
@@ -60,11 +61,12 @@ export default function Home(props: HomeProps) {
   }, []);
   const { user } = useCurrentUser();
 
-  const handleCreateTweet = useCallback(() => {
-    mutate({
+  const handleCreateTweet = useCallback(async () => {
+    await mutate({
       content,
     });
-  }, [content, mutate]);
+    setContent("");
+  }, [mutate, content]);
 
   return (
     <div>
@@ -105,7 +107,7 @@ export default function Home(props: HomeProps) {
           </div>
         </div>
 
-        {props.tweets?.map((tweet) =>
+        {tweets?.map((tweet) =>
           tweet ? <FeedCard key={tweet?.id} data={tweet as Tweet} /> : null
         )}
       </TwitterLayout>
