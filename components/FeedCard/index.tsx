@@ -8,7 +8,7 @@ import { FiShare } from "react-icons/fi";
 import { PiBookmarkSimpleBold } from "react-icons/pi";
 import { Tweet } from "@/gql/graphql";
 import Link from "next/link";
-import { GetServerSideProps } from "next";
+// import { GetServerSideProps } from "next";
 
 interface FeedCardProps {
   data: Tweet;

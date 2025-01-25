@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import TwitterLayout from "@/components/Layout/TwitterLayout";
+
 import { NextPage, GetServerSideProps } from "next";
 import Image from "next/image";
 import { GoArrowLeft } from "react-icons/go";

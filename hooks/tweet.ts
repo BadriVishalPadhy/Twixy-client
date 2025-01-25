@@ -4,6 +4,7 @@ import { getAllTweetsQuery } from '@/graphql/query/tweet';
 import { createTweetMutation } from '@/mutation/tweet';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 
 export const useCreateTweet = () => {

@@ -1,21 +1,23 @@
-import { Tweet } from "@/gql/graphql";
+// import { Tweet } from "@/gql/graphql";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { useCurrentUser } from "@/hooks/user";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
-import React, { Children, useCallback, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { CgProfile } from "react-icons/cg";
 import { GiBirdTwitter } from "react-icons/gi";
 import { GoHomeFill, GoSearch } from "react-icons/go";
 import { IoNotifications } from "react-icons/io5";
-import { PiBookmarkSimpleBold, PiImageSquare } from "react-icons/pi";
+import { PiBookmarkSimpleBold } from "react-icons/pi";
 import { SlEnvolope } from "react-icons/sl";
-import FeedCard from "../FeedCard";
+// import FeedCard from "../FeedCard";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { graphqlClient } from "@/client/api";
 import { verifyUserGoogleTokenQuery } from "@/graphql/query/user";
 import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import { link } from "fs";
+// import { link } from "fs";
 
 interface TwitterLayoutInterface {
   children: React.ReactNode;
@@ -97,7 +99,7 @@ const TwitterLayout: React.FC<TwitterLayoutInterface> = (props) => {
           <div className="mt-2  text-2xl font-medium">
             <ul>
               {sideBarItems.map((item) => (
-                <Link href={item.link}>
+                <Link key={1} href={item.link}>
                   <li className="flex justify-start items-center gap-4 text-2xl hover:bg-[#181818]  cursor-pointer p-4 rounded-full transition-all  w-fit ">
                     <span>{item.icon}</span>{" "}
                     <span className="hidden sm:block">{item.title}</span>{" "}

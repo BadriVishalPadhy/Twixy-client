@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import React, { useCallback, useState } from "react";
 import { GiBirdTwitter } from "react-icons/gi";
 import { GoHomeFill } from "react-icons/go";
